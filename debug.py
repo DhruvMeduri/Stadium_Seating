@@ -1,6 +1,3 @@
-list = [[1,1],[1,1],1,1,2,3,4,4]
-print(list)
-list = set(list)
-print(list)
-list = list(list)
+list = [[1,2],[1,3]]
+list = sorted(list)
 print(list)
