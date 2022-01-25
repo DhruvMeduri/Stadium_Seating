@@ -71,7 +71,7 @@ def remove_duplicates(level,size): # This function removes all the duplicate con
         translated_level.append(normalize_origin(config[0]))
     for translated_config in translated_level:
         encodings.append(encode_shape(translated_config,size))
-    encodings = sorted(encodings)
+    encodings = sorted(encodings)# O(nlogn) complexity
     encodings = set(encodings)
     encodings = list(encodings)
     for i in encodings:
