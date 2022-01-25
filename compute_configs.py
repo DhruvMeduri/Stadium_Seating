@@ -1,9 +1,9 @@
-# The pair [shape,boundary] is a pair of lists where each element of shape and boundary is further a pair i.e cartesian coordinate.
+# The pair [shape,boundary] is a pair of lists where each element of shape and boundary is further a pair i.e a cartesian coordinate.
 all_configs = [[[[0,0]],[[1,0],[-1,0],[0,1],[0,-1]]]]
-def add_boundary(shape,boundary):
+
+def grow_shape(shape,boundary):# This function computes all the configurations from a given shape by adding on the boundary
     new_configs = []
     for ele in boundary:
-        #print(ele)
         temp_new_shape = shape.copy()
         temp_new_shape.append(ele)
         temp_new_boundary = boundary.copy()
@@ -17,9 +17,9 @@ def add_boundary(shape,boundary):
         if [ele[0],ele[1]-1] not in temp_new_shape and [ele[0],ele[1]-1] not in temp_new_boundary:
             temp_new_boundary.append([ele[0],ele[1]-1])
         new_configs.append([temp_new_shape,temp_new_boundary])
-    #print(new_configs)
     return new_configs
-def normalize_origin(shape):
+
+def normalize_origin(shape):# This function normalizes all the shapes by translating them accordingly.
     y_max = -10000
     x_min = 100000
     for point in shape:
@@ -32,7 +32,7 @@ def normalize_origin(shape):
         shape_translate.append([point[0]-x_min,point[1]-y_max])
     return shape_translate
 
-def encode_shape(translated_shape,size):
+def encode_shape(translated_shape,size):# This function encodes a shape as a binary string
     encoding = ''
     for r in range(0,-size,-1):
         for c in range(0,size):
@@ -42,7 +42,7 @@ def encode_shape(translated_shape,size):
                 encoding = encoding + '0'
     return encoding
 
-def compute_boundary(shape):
+def compute_boundary(shape):# This function computes the boundary of a given shape
     boundary = []
     for i in shape:
         if [i[0]+1,i[1]] not in shape and [i[0]+1,i[1]] not in boundary:
@@ -54,7 +54,8 @@ def compute_boundary(shape):
         if [i[0],i[1]-1] not in shape and [i[0],i[1]-1] not in boundary:
             boundary.append([i[0],i[1]-1])
     return boundary
-def encode_to_shape(encoding,size):
+
+def encode_to_shape(encoding,size):# This function returns the shape from a given encoding
     shape = []
     for r in range(0,-size,-1):
         for c in range(0,size):
@@ -62,7 +63,7 @@ def encode_to_shape(encoding,size):
                 shape.append([c,r])
     #print(shape)
     return shape
-def remove_duplicates(level,size):
+def remove_duplicates(level,size): # This function removes all the duplicate confingurations from a level
     next_level = []
     translated_level = []
     encodings = []
@@ -79,23 +80,23 @@ def remove_duplicates(level,size):
         next_level.append([shape,boundary])
     return next_level
     #return translated_level
-def compute_rec(level):# Takes in all the configs in a level.
+def compute_rec(level):# This computes all the computes all the configurations recursively
     #print(len(shape))
     next_level = []
     for i in level:
-        temp_new_configs = add_boundary(i[0],i[1])
+        temp_new_configs = grow_shape(i[0],i[1])
         next_level.extend(temp_new_configs)
 # Here I need to remove the duplicates in next_level
     next_level = remove_duplicates(next_level,12)
     #for i in next_level:
     #    print(i)
     all_configs.extend(next_level)
-    if(len(next_level[0][0])<12):
+    if(len(next_level[0][0])<5):
         compute_rec(next_level)
 
 
 
 compute_rec([[[[0,0]],[[1,0],[0,1],[0,-1],[-1,0]]]])
 for i in all_configs:
-   print(i)
+   print('Shape:',i[0])
 print(len(all_configs))
