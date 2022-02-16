@@ -1,45 +1,54 @@
+
 import numpy as np
 import math
 import random
+import time
 class walk_on_graph:
     side = 10
     n2 = side*side
     graph = np.zeros([n2,n2])
-    m = 4
+    m = 7
     marker = np.zeros(n2)
     ver_lst = list(range(0, n2))# this is to store the remaining vertices in the graph
 
     def remove_vertex(self,x):
         self.ver_lst.remove(x)
-        #removing the vertex
-        #self.graph = np.delete(self.graph,x,0)
-        #self.graph = np.delete(self.graph,x,1)
+
 
     def rand_walk(self, start):
         walk_memory = [start]
         #print("1")
         for i in range(self.m - 1):
-           #print("2")
+           #print(i)
            bound = 1
            c =1
-           while(c!=0 and bound <= 4000*(self.m)):
+           # This is the code to make one step
+           while(c!=0 and bound <= 5000):
               #print("3")
               step = random.randint(1,4)
-              if step == 1 and start % self.side!=0 and (start - 1) in self.ver_lst and (start-1):
+              if step == 1 and start % self.side!=0 and (start - 1) in self.ver_lst:
+                  #print(start-1)
                   walk_memory.append(start-1)
+                  start = start - 1
                   c = 0
-              elif step == 2 and math.ceil(start/self.side)!=0 and (start - self.side) in self.ver_lst and (start-self.side):
+              elif step == 2 and math.ceil(start/self.side)!=0 and (start - self.side) in self.ver_lst:
+                  #print(start-self.side)
                   walk_memory.append(start-self.side)
+                  start = start-self.side
                   c = 0
-              elif step == 3 and start % self.side!=(self.side)-1 and (start + 1) in self.ver_lst and (start+1):
+              elif step == 3 and start % self.side!=(self.side)-1 and (start + 1) in self.ver_lst:
+                  #print(start+1)
                   walk_memory.append(start+1)
+                  start = start+1
                   c = 0
-              elif step == 4 and math.ceil(start/self.side)!=self.side - 1 and (start + self.side) in self.ver_lst and (start+self.side):
+              elif step == 4 and math.ceil(start/self.side)!=self.side - 1 and (start + self.side) in self.ver_lst:
+                  #print(start + self.side)
                   walk_memory.append(start + self.side)
+                  start = start + self.side
                   c = 0
               bound = bound + 1
-
         walk_memory = list(set(walk_memory))
+        print(walk_memory)
         return walk_memory
 
     def check_polygon_adjacent(self,poly):
@@ -60,9 +69,6 @@ class walk_on_graph:
         return adj
 
     def update(self, adj, poly):
-        print("Remaining: ",self.ver_lst)
-        print("Family: ",poly)
-        print("Wastage: ",adj)
         for i in poly:
             #print("3")
             self.marker[i] = 1
@@ -80,9 +86,8 @@ class walk_on_graph:
                 count = count + 1
         return count
     def alg(self):
-        while(self.count_zeros()!=0):
-            print("1")
-            start = random.choice(self.ver_lst)
+            #print("1")
+            start = 0
             print("Start: ",start)
             poly = self.rand_walk(start)
             adj = self.check_polygon_adjacent(poly)
@@ -97,9 +102,12 @@ class walk_on_graph:
                 print(int(self.marker[k]), end = '       ')
             print("\n")
 
+start = time.time()
 obj = walk_on_graph()
-
 obj.alg()
+end = time.time()
+print("Runtime: ",end-start)
+#obj.out_seating()
 #obj.out_seating()
 #obj.make_graph()
 #print(obj.graph)

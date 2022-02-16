@@ -1,3 +1,4 @@
+
 # The pair [shape,boundary] is a pair of lists where each element of shape and boundary is further a pair i.e a cartesian coordinate.
 all_configs = [[[[0,0]],[[1,0],[-1,0],[0,1],[0,-1]]]]
 
@@ -72,7 +73,7 @@ def remove_duplicates(level,size): # This function removes all the duplicate con
     for translated_config in translated_level:
         encodings.append(encode_shape(translated_config,size))
     encodings = sorted(encodings)# O(nlogn) complexity
-    encodings = set(encodings)
+    encodings = set(encodings)# Write the code for removing duplicates manually since we do not know the complexity of set()
     encodings = list(encodings)
     for i in encodings:
         shape = encode_to_shape(i,size)
@@ -80,23 +81,37 @@ def remove_duplicates(level,size): # This function removes all the duplicate con
         next_level.append([shape,boundary])
     return next_level
     #return translated_level
-def compute_rec(level):# This computes all the computes all the configurations recursively
+def compute_rec(level,size):# This computes all the configurations recursively
     #print(len(shape))
     next_level = []
     for i in level:
         temp_new_configs = grow_shape(i[0],i[1])
         next_level.extend(temp_new_configs)
 # Here I need to remove the duplicates in next_level
-    next_level = remove_duplicates(next_level,12)
+    next_level = remove_duplicates(next_level,size)
     #for i in next_level:
     #    print(i)
     all_configs.extend(next_level)
-    if(len(next_level[0][0])<5):
-        compute_rec(next_level)
+    if(len(next_level[0][0])<size):
+        compute_rec(next_level,size)
 
-
-
-compute_rec([[[[0,0]],[[1,0],[0,1],[0,-1],[-1,0]]]])
-for i in all_configs:
-   print('Shape:',i[0])
-print(len(all_configs))
+def compute_configs(size):
+    all_configs_format = []
+    compute_rec([[[[0,0]],[[1,0],[0,1],[0,-1],[-1,0]]]],size)
+    for i in all_configs:
+        x_max = -100000
+        y_max =  100000
+        for j in i[0]:
+            if j[0]>x_max:
+                x_max = j[0]
+            if j[1]<y_max:
+                y_max = j[1]
+        l = x_max + 1
+        b = abs(y_max) + 1
+        empty = set([])
+        for r in range(b):
+            for c in range(l):
+                if [c,-r] not in i[0]:
+                    empty.add(l*r + c)
+        all_configs_format.append([empty,l,b])
+    return all_configs_format
