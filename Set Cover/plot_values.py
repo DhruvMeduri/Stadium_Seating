@@ -2,10 +2,10 @@ import alg_class
 import time
 perf_lst = []
 time_lst = []
-for i in range(1,16):
+for i in range(1,9):
     print(i)
     start = time.time()
-    obj = alg_class.compute_arrangement(i,6)
+    obj = alg_class.compute_arrangement(21,i)
     configs = obj.printconfig()
     perf = obj.add_final(configs)
     end = time.time()
